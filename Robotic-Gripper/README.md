@@ -148,6 +148,8 @@ file page to access the original file.
 
 ## Project Documentation
 
+- [CAD DESIGN](CAD-Design/)
+- [G Code](G-code/)
+- [Setup Sheet](Setup-Sheet/)
+- [Videos](Videos/)
 - [Design Images](Design-Images/)
-- [Prototype Images](Prototype-Images/)
-- [Project Report](Report/)

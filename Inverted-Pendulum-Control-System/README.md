@@ -170,8 +170,7 @@ Potential extensions include:
 
 ## Project Documentation
 
-- [MATLAB Files](MATLAB/)
+- [Figures](Figures/)
+- [Report](Report/)
+- [Results](Result/)
 - [Simulink Model](Simulink/)
-- [Simulation Figures](figures/)
-- [Results](results/)
-- [Project Report](report/)

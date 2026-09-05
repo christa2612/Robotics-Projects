@@ -140,6 +140,12 @@ and future intelligent automation systems.
 - Servo Actuation
 - Motion Study Simulation
 
+## File Access Note
+
+Some project files are large and may not be previewed directly on
+GitHub. For these files, use the **View raw** option on the GitHub
+file page to access the original file.
+
 ## Project Documentation
 
 - [Design Images](Design-Images/)

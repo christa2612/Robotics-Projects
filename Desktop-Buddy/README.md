@@ -289,7 +289,6 @@ Some project files are large and may not be previewed directly on GitHub. For th
 
 ## 📂 Project Documentation
 
-- [Firmware](Firmware/)
-- [Assets](Assets/)
-- [Images](Images/)
-- [Videos](Videos/)
+- [Code](Code/)
+- [Model](Model-Images/)
+- [Videos](Working-Videos/)

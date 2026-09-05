@@ -158,39 +158,6 @@ Integration of Designed Base with Robotic Arm
 
 ---
 
-## 🔌 System Architecture
-
-The overall system follows the architecture:
-
-```text
-              Mobile Application
-                     │
-                     │ Wireless Commands
-                     ↓
-                   ESP32
-                     │
-              Servo Control Signals
-                     │
-          ┌──────────┼──────────┐
-          ↓          ↓          ↓
-       Servo 1    Servo 2    Servo 3 ... Servo 4
-          │          │          │          │
-          └──────────┴──────────┴──────────┘
-                         ↓
-                 4-DOF Robotic Arm
-                         │
-                         ↓
-              Custom-Designed Base
-```
-
-The mobile application sends movement commands wirelessly to the ESP32. The ESP32 processes these commands and generates the required control signals for the servo motors.
-
-The servo motors actuate the corresponding joints, allowing the robotic arm to perform the required movements.
-
-The custom-designed base provides the mechanical support and mounting interface for the arm assembly.
-
----
-
 ## 📱 Mobile Application
 
 A dedicated mobile application was used to provide wireless control of the robotic arm.
@@ -278,67 +245,6 @@ The testing process included:
 
 ---
 
-## 📂 Repository Structure
-
-```text
-4DOF-RObotic-Arm/
-│
-├── README.md
-│
-├── Design and model Images/
-│
-├── Software-code/
-│
-└── Working Videos/
-```
-
----
-
-## 📸 Project Documentation
-
-The repository contains documentation related to the development and demonstration of the robotic arm system.
-
-### Design and Model Images
-
-The design documentation includes:
-
-- CAD model of the custom-designed robotic arm base
-- Base design views
-- Fabricated base
-- Robotic arm assembly
-- Final integrated prototype
-
-### Software
-
-The software section contains the code and related files used for controlling the robotic arm through the ESP32.
-
-### Working Videos
-
-Demonstration videos show the operation of the robotic arm and its control system.
-
----
-
-## 🧠 Learning Outcomes
-
-This project provided practical experience in:
-
-- Mechanical CAD design
-- Robotic arm base design
-- 3D modelling
-- Design for fabrication
-- 3D printing
-- Servo motor integration
-- ESP32 programming
-- Embedded systems
-- Wireless communication
-- Mobile application integration
-- Hardware-software integration
-- Mechanical assembly
-- System testing and calibration
-- Robotics prototyping
-
----
-
 ## 🚀 Future Improvements
 
 The robotic arm system can be further enhanced by incorporating:
@@ -393,9 +299,11 @@ A key outcome of the project was the successful **design, fabrication, and integ
 
 ---
 
-## 📁 File Access Note
+## File Access Note
 
-Some CAD, software, and project files may be large and may not be previewed directly on GitHub. If a file does not open in the GitHub preview, use the **View raw** option on the corresponding file page to access the original file.
+Some project files are large and may not be previewed directly on
+GitHub. For these files, use the **View raw** option on the GitHub
+file page to access the original file.
 
 ---
 

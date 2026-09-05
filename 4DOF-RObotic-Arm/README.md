@@ -119,6 +119,8 @@ Assembly
      ↓
 Integration with Robotic Arm
 
+---
+
 ## 📂 Project Documentation
 
 - [Design and model Images](Design%20and%20model%20Images/)

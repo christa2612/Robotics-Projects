@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="430" height="932" viewBox="0 0 430 932">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#070A0F"/>
+      <stop offset="0.45" stop-color="#0B1020"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#1E293B" stop-opacity="0.78"/>
+      <stop offset="1" stop-color="#0F172A" stop-opacity="0.72"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#22D3EE"/>
+      <stop offset="0.55" stop-color="#38BDF8"/>
+      <stop offset="1" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="rail" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#22D3EE"/>
+      <stop offset="0.52" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="thumb" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#F8FAFC"/>
+      <stop offset="0.45" stop-color="#94A3B8"/>
+      <stop offset="1" stop-color="#1E293B"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#000000" flood-opacity="0.42"/>
+    </filter>
+    <filter id="cyanGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="#22D3EE" flood-opacity="0.55"/>
+    </filter>
+    <filter id="violetGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="12" flood-color="#8B5CF6" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <rect width="430" height="932" fill="url(#bg)"/>
+  <circle cx="72" cy="64" r="170" fill="#22D3EE" opacity="0.10"/>
+  <circle cx="388" cy="160" r="190" fill="#8B5CF6" opacity="0.10"/>
+  <circle cx="344" cy="850" r="170" fill="#38BDF8" opacity="0.07"/>
+
+  <rect x="14" y="14" width="402" height="904" rx="28" fill="#0B1020" opacity="0.78" stroke="#334155" stroke-opacity="0.36"/>
+
+  <g font-family="Inter, SF Pro Display, Arial, sans-serif">
+    <text x="30" y="48" font-size="11" font-weight="800" letter-spacing="2.2" fill="#67E8F9">ROBOT ARM PRO</text>
+    <text x="30" y="83" font-size="34" font-weight="800" fill="#F8FAFC">Arm Control</text>
+    <text x="30" y="108" font-size="13" font-weight="500" fill="#94A3B8">Nano32 autonomous robotics console</text>
+
+    <rect x="282" y="34" width="88" height="38" rx="19" fill="#0B2A24" stroke="#22C55E" stroke-opacity="0.55" filter="url(#cyanGlow)"/>
+    <circle cx="304" cy="53" r="5" fill="#22C55E"/>
+    <text x="323" y="58" font-size="13" font-weight="800" fill="#BBF7D0">READY</text>
+    <text x="282" y="93" font-size="11" fill="#94A3B8">PCA9685 0x40</text>
+    <text x="282" y="110" font-size="11" fill="#64748B">192.168.4.1</text>
+
+    <rect x="30" y="136" width="370" height="82" rx="20" fill="url(#panel)" stroke="#94A3B8" stroke-opacity="0.18" filter="url(#shadow)"/>
+    <text x="50" y="164" font-size="14" font-weight="800" fill="#F8FAFC">Command Mode</text>
+    <text x="50" y="188" font-size="12" fill="#94A3B8">Live control speed</text>
+    <rect x="172" y="154" width="78" height="38" rx="14" fill="#0B1220" stroke="#334155"/>
+    <text x="211" y="178" text-anchor="middle" font-size="13" font-weight="800" fill="#CBD5E1">Slow</text>
+    <rect x="256" y="154" width="78" height="38" rx="14" fill="url(#accent)" filter="url(#cyanGlow)"/>
+    <text x="295" y="178" text-anchor="middle" font-size="13" font-weight="900" fill="#020617">Medium</text>
+    <rect x="340" y="154" width="48" height="38" rx="14" fill="#0B1220" stroke="#334155"/>
+    <text x="364" y="178" text-anchor="middle" font-size="13" font-weight="800" fill="#CBD5E1">Fast</text>
+
+    <rect x="30" y="238" width="370" height="438" rx="24" fill="url(#panel)" stroke="#94A3B8" stroke-opacity="0.18" filter="url(#shadow)"/>
+    <text x="50" y="272" font-size="18" font-weight="850" fill="#F8FAFC">Primary Servo Control</text>
+    <text x="50" y="294" font-size="12" fill="#94A3B8">Drag faders. The arm follows live.</text>
+    <rect x="300" y="256" width="64" height="30" rx="15" fill="#082F49" stroke="#38BDF8" stroke-opacity="0.55"/>
+    <text x="332" y="275" text-anchor="middle" font-size="12" font-weight="800" fill="#7DD3FC">LIVE</text>
+
+    <g>
+      <text x="76" y="331" text-anchor="middle" font-size="16" font-weight="850" fill="#67E8F9">90°</text>
+      <text x="154" y="331" text-anchor="middle" font-size="16" font-weight="850" fill="#67E8F9">92°</text>
+      <text x="232" y="331" text-anchor="middle" font-size="16" font-weight="850" fill="#67E8F9">86°</text>
+      <text x="310" y="331" text-anchor="middle" font-size="16" font-weight="850" fill="#67E8F9">42°</text>
+
+      <text x="76" y="360" text-anchor="middle" font-size="10" font-weight="700" fill="#64748B">180</text>
+      <text x="154" y="360" text-anchor="middle" font-size="10" font-weight="700" fill="#64748B">180</text>
+      <text x="232" y="360" text-anchor="middle" font-size="10" font-weight="700" fill="#64748B">180</text>
+      <text x="310" y="360" text-anchor="middle" font-size="10" font-weight="700" fill="#64748B">180</text>
+
+      <rect x="68" y="374" width="16" height="214" rx="8" fill="url(#rail)" filter="url(#cyanGlow)"/>
+      <rect x="146" y="374" width="16" height="214" rx="8" fill="url(#rail)"/>
+      <rect x="224" y="374" width="16" height="214" rx="8" fill="url(#rail)"/>
+      <rect x="302" y="374" width="16" height="214" rx="8" fill="url(#rail)"/>
+
+      <rect x="54" y="452" width="44" height="80" rx="15" fill="url(#thumb)" stroke="#F8FAFC" stroke-opacity="0.18"/>
+      <rect x="132" y="446" width="44" height="80" rx="15" fill="url(#thumb)" stroke="#F8FAFC" stroke-opacity="0.18"/>
+      <rect x="210" y="460" width="44" height="80" rx="15" fill="url(#thumb)" stroke="#F8FAFC" stroke-opacity="0.18"/>
+      <rect x="288" y="525" width="44" height="80" rx="15" fill="url(#thumb)" stroke="#F8FAFC" stroke-opacity="0.18"/>
+
+      <text x="76" y="612" text-anchor="middle" font-size="10" font-weight="700" fill="#64748B">0</text>
+      <text x="154" y="612" text-anchor="middle" font-size="10" font-weight="700" fill="#64748B">0</text>
+      <text x="232" y="612" text-anchor="middle" font-size="10" font-weight="700" fill="#64748B">0</text>
+      <text x="310" y="612" text-anchor="middle" font-size="10" font-weight="700" fill="#64748B">0</text>
+
+      <text x="76" y="641" text-anchor="middle" font-size="13" font-weight="850" fill="#F8FAFC">Base</text>
+      <text x="154" y="641" text-anchor="middle" font-size="13" font-weight="850" fill="#F8FAFC">Shoulder</text>
+      <text x="232" y="641" text-anchor="middle" font-size="13" font-weight="850" fill="#F8FAFC">Elbow</text>
+      <text x="310" y="641" text-anchor="middle" font-size="13" font-weight="850" fill="#F8FAFC">Clamp</text>
+    </g>
+
+    <rect x="30" y="696" width="370" height="116" rx="22" fill="url(#panel)" stroke="#94A3B8" stroke-opacity="0.18"/>
+    <text x="50" y="729" font-size="15" font-weight="850" fill="#F8FAFC">Actions</text>
+    <rect x="50" y="748" width="98" height="44" rx="14" fill="#111827" stroke="#475569"/>
+    <text x="99" y="776" text-anchor="middle" font-size="13" font-weight="800" fill="#E2E8F0">Go Home</text>
+    <rect x="158" y="748" width="126" height="44" rx="14" fill="#111827" stroke="#475569"/>
+    <text x="221" y="776" text-anchor="middle" font-size="13" font-weight="800" fill="#E2E8F0">Set Startup</text>
+    <rect x="294" y="748" width="64" height="44" rx="14" fill="url(#accent)" filter="url(#violetGlow)"/>
+    <text x="326" y="776" text-anchor="middle" font-size="13" font-weight="900" fill="#020617">Save</text>
+
+    <rect x="30" y="830" width="370" height="58" rx="18" fill="#0B1220" stroke="#334155" stroke-opacity="0.85"/>
+    <text x="50" y="854" font-size="12" font-weight="800" fill="#CBD5E1">Wi-Fi Session</text>
+    <text x="50" y="874" font-size="11" fill="#64748B">RobotArmPro-Setup · Phone 192.168.4.2</text>
+    <circle cx="360" cy="859" r="8" fill="#22C55E" filter="url(#cyanGlow)"/>
+  </g>
+</svg>

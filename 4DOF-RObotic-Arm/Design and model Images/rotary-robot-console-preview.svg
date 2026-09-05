@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="430" height="932" viewBox="0 0 430 932">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#060B18"/>
+      <stop offset="1" stop-color="#0A1226"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#1E293B" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#0F172A" stop-opacity="0.72"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#00D4FF"/>
+      <stop offset="1" stop-color="#7C4DFF"/>
+    </linearGradient>
+    <linearGradient id="arm" x1="0" x2="1">
+      <stop offset="0" stop-color="#00D4FF"/>
+      <stop offset="1" stop-color="#7C4DFF"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#000" flood-opacity="0.42"/>
+    </filter>
+    <filter id="glow">
+      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#00D4FF" flood-opacity="0.48"/>
+    </filter>
+  </defs>
+  <rect width="430" height="932" fill="url(#bg)"/>
+  <circle cx="80" cy="80" r="160" fill="#00D4FF" opacity="0.12"/>
+  <circle cx="380" cy="130" r="180" fill="#7C4DFF" opacity="0.14"/>
+  <rect x="14" y="14" width="402" height="904" rx="28" fill="#081020" opacity="0.86" stroke="#334155"/>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <text x="30" y="48" font-size="11" font-weight="800" letter-spacing="2.3" fill="#67E8F9">INDUSTRIAL ROBOTICS CONSOLE</text>
+    <text x="30" y="82" font-size="33" font-weight="850" fill="#F8FAFC">Robot Arm Pro</text>
+    <text x="30" y="106" font-size="13" fill="#94A3B8">Mission-ready control for Nano32</text>
+    <rect x="286" y="38" width="92" height="36" rx="18" fill="#052E25" stroke="#00E676" filter="url(#glow)"/>
+    <circle cx="306" cy="56" r="5" fill="#00E676"/>
+    <text x="326" y="61" font-size="13" font-weight="800" fill="#BBF7D0">READY</text>
+
+    <g>
+      <rect x="30" y="128" width="84" height="70" rx="16" fill="url(#panel)" stroke="#334155"/>
+      <text x="44" y="153" font-size="10" font-weight="800" fill="#94A3B8">CONNECTION</text>
+      <text x="44" y="178" font-size="14" font-weight="850" fill="#F8FAFC">CONNECTED</text>
+      <rect x="122" y="128" width="84" height="70" rx="16" fill="url(#panel)" stroke="#334155"/>
+      <text x="136" y="153" font-size="10" font-weight="800" fill="#94A3B8">PCA9685</text>
+      <text x="136" y="178" font-size="14" font-weight="850" fill="#00E676">ONLINE</text>
+      <rect x="214" y="128" width="84" height="70" rx="16" fill="url(#panel)" stroke="#334155"/>
+      <text x="228" y="153" font-size="10" font-weight="800" fill="#94A3B8">LIVE</text>
+      <text x="228" y="178" font-size="14" font-weight="850" fill="#67E8F9">ACTIVE</text>
+      <rect x="306" y="128" width="84" height="70" rx="16" fill="url(#panel)" stroke="#334155"/>
+      <text x="320" y="153" font-size="10" font-weight="800" fill="#94A3B8">IP</text>
+      <text x="320" y="178" font-size="13" font-weight="850" fill="#F8FAFC">192.168.4.1</text>
+    </g>
+
+    <rect x="30" y="218" width="370" height="228" rx="24" fill="url(#panel)" stroke="#334155" filter="url(#shadow)"/>
+    <text x="50" y="250" font-size="11" font-weight="800" letter-spacing="1.6" fill="#67E8F9">ROBOT VISUALIZATION</text>
+    <text x="50" y="276" font-size="20" font-weight="850" fill="#F8FAFC">Real-time Pose</text>
+    <rect x="306" y="246" width="62" height="30" rx="15" fill="#082F49" stroke="#38BDF8"/>
+    <text x="337" y="266" text-anchor="middle" font-size="12" font-weight="800" fill="#7DD3FC">LIVE</text>
+    <g opacity="0.34">
+      <path d="M70 400 H360 M86 380 H344 M105 360 H325" stroke="#00D4FF"/>
+      <path d="M96 340 L70 408 M150 332 L132 408 M205 326 L205 408 M260 332 L278 408 M315 340 L340 408" stroke="#00D4FF"/>
+    </g>
+    <g transform="translate(82 388)">
+      <ellipse cx="0" cy="20" rx="44" ry="10" fill="#00D4FF" opacity="0.16"/>
+      <circle cx="0" cy="0" r="18" fill="#111827" stroke="#00D4FF" stroke-width="3" filter="url(#glow)"/>
+      <line x1="0" y1="0" x2="82" y2="-56" stroke="url(#arm)" stroke-width="15" stroke-linecap="round"/>
+      <circle cx="82" cy="-56" r="15" fill="#111827" stroke="#00D4FF" stroke-width="3"/>
+      <line x1="82" y1="-56" x2="158" y2="-92" stroke="url(#arm)" stroke-width="14" stroke-linecap="round"/>
+      <circle cx="158" cy="-92" r="13" fill="#111827" stroke="#00D4FF" stroke-width="3"/>
+      <line x1="158" y1="-92" x2="224" y2="-84" stroke="url(#arm)" stroke-width="12" stroke-linecap="round"/>
+      <circle cx="224" cy="-84" r="10" fill="#111827" stroke="#00D4FF" stroke-width="3"/>
+      <line x1="224" y1="-84" x2="256" y2="-100" stroke="#E0F2FE" stroke-width="6" stroke-linecap="round"/>
+      <line x1="224" y1="-84" x2="256" y2="-68" stroke="#E0F2FE" stroke-width="6" stroke-linecap="round"/>
+    </g>
+
+    <rect x="30" y="466" width="370" height="292" rx="24" fill="url(#panel)" stroke="#334155"/>
+    <text x="50" y="498" font-size="11" font-weight="800" letter-spacing="1.6" fill="#67E8F9">SERVO CONTROLS</text>
+    <text x="50" y="523" font-size="20" font-weight="850" fill="#F8FAFC">Rotary Angle Control</text>
+    <g>
+      <rect x="50" y="542" width="84" height="36" rx="14" fill="#0F172A" stroke="#334155"/>
+      <text x="92" y="565" text-anchor="middle" font-size="13" font-weight="800" fill="#CBD5E1">Slow</text>
+      <rect x="144" y="542" width="92" height="36" rx="14" fill="url(#accent)" filter="url(#glow)"/>
+      <text x="190" y="565" text-anchor="middle" font-size="13" font-weight="900" fill="#020617">Medium</text>
+      <rect x="246" y="542" width="84" height="36" rx="14" fill="#0F172A" stroke="#334155"/>
+      <text x="288" y="565" text-anchor="middle" font-size="13" font-weight="800" fill="#CBD5E1">Fast</text>
+    </g>
+
+    <g>
+      <g transform="translate(105 642)">
+        <circle r="50" fill="#020617" stroke="#334155" stroke-width="2"/>
+        <path d="M-35 35 A50 50 0 1 1 35 35" fill="none" stroke="#00D4FF" stroke-width="9" stroke-linecap="round"/>
+        <line x1="0" y1="-34" x2="0" y2="-48" stroke="#E0F2FE" stroke-width="4" stroke-linecap="round" filter="url(#glow)"/>
+        <circle r="30" fill="#0F172A" stroke="#334155"/>
+        <text y="5" text-anchor="middle" font-size="18" font-weight="850" fill="#F8FAFC">90°</text>
+        <text y="72" text-anchor="middle" font-size="13" font-weight="800" fill="#F8FAFC">Base</text>
+      </g>
+      <g transform="translate(270 642)">
+        <circle r="50" fill="#020617" stroke="#334155" stroke-width="2"/>
+        <path d="M-35 35 A50 50 0 1 1 28 42" fill="none" stroke="#00D4FF" stroke-width="9" stroke-linecap="round"/>
+        <line x1="8" y1="-33" x2="12" y2="-47" stroke="#E0F2FE" stroke-width="4" stroke-linecap="round"/>
+        <circle r="30" fill="#0F172A" stroke="#334155"/>
+        <text y="5" text-anchor="middle" font-size="18" font-weight="850" fill="#F8FAFC">96°</text>
+        <text y="72" text-anchor="middle" font-size="13" font-weight="800" fill="#F8FAFC">Shoulder</text>
+      </g>
+    </g>
+
+    <g transform="translate(0 132)">
+      <g transform="translate(105 642)">
+        <circle r="50" fill="#020617" stroke="#334155" stroke-width="2"/>
+        <path d="M-35 35 A50 50 0 1 1 20 46" fill="none" stroke="#00D4FF" stroke-width="9" stroke-linecap="round"/>
+        <line x1="-8" y1="-33" x2="-12" y2="-47" stroke="#E0F2FE" stroke-width="4" stroke-linecap="round"/>
+        <circle r="30" fill="#0F172A" stroke="#334155"/>
+        <text y="5" text-anchor="middle" font-size="18" font-weight="850" fill="#F8FAFC">84°</text>
+        <text y="72" text-anchor="middle" font-size="13" font-weight="800" fill="#F8FAFC">Elbow</text>
+      </g>
+      <g transform="translate(270 642)">
+        <circle r="50" fill="#020617" stroke="#334155" stroke-width="2"/>
+        <path d="M-35 35 A50 50 0 0 1 -4 -50" fill="none" stroke="#00D4FF" stroke-width="9" stroke-linecap="round"/>
+        <line x1="-28" y1="-19" x2="-40" y2="-27" stroke="#E0F2FE" stroke-width="4" stroke-linecap="round"/>
+        <circle r="30" fill="#0F172A" stroke="#334155"/>
+        <text y="5" text-anchor="middle" font-size="18" font-weight="850" fill="#F8FAFC">42°</text>
+        <text y="72" text-anchor="middle" font-size="13" font-weight="800" fill="#F8FAFC">Clamp</text>
+      </g>
+    </g>
+
+    <rect x="30" y="778" width="370" height="82" rx="22" fill="url(#panel)" stroke="#334155"/>
+    <text x="50" y="808" font-size="11" font-weight="800" letter-spacing="1.6" fill="#94A3B8">PRIMARY ACTIONS</text>
+    <rect x="50" y="822" width="88" height="40" rx="14" fill="#0F172A" stroke="#475569"/>
+    <text x="94" y="847" text-anchor="middle" font-size="13" font-weight="800" fill="#E2E8F0">Go Home</text>
+    <rect x="148" y="822" width="122" height="40" rx="14" fill="#0F172A" stroke="#475569"/>
+    <text x="209" y="847" text-anchor="middle" font-size="13" font-weight="800" fill="#E2E8F0">Set Startup</text>
+    <rect x="280" y="822" width="82" height="40" rx="14" fill="url(#accent)" filter="url(#glow)"/>
+    <text x="321" y="847" text-anchor="middle" font-size="13" font-weight="900" fill="#020617">Save</text>
+
+    <rect x="30" y="876" width="370" height="34" rx="14" fill="#0B1220" stroke="#334155"/>
+    <text x="48" y="898" font-size="11" font-weight="750" fill="#94A3B8">Network: RobotArmPro-Setup · Phone 192.168.4.2</text>
+  </g>
+</svg>

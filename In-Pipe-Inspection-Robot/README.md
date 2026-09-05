@@ -38,6 +38,20 @@ Each arm contains:
 
 The complete robot therefore uses nine wheels.
 
+### CAD Design
+
+#### 3D CAD Model
+
+![3D CAD Model](Design%20images/3D%20CAD%20model%20of%20the%20in-pipe%20inspection%20robot.png)
+
+#### Isometric CAD Assembly
+
+![Isometric CAD Assembly](Design%20images/Isometric%20CAD%20assembly%20view%20of%20an%20in-pipe%20robot%20.png)
+
+#### Orthographic Views
+
+![Orthographic Views](Design%20images/Orthographic%20views%20of%20the%20in-pipe%20inspection%20robot.png)
+
 ## Working Principle
 
 The robot uses friction-driven locomotion.
@@ -47,7 +61,7 @@ contact between the wheels and the inner pipe wall.
 
 The available traction force is expressed as:
 
-F_traction = μ F_normal
+**F_traction = μ F_normal**
 
 The generated traction must overcome rolling resistance and the
 gravitational component when operating on inclined pipelines.
@@ -78,6 +92,9 @@ A design force of 30 N was considered.
 
 The calculated wheel torque requirement is approximately 1.05 Nm.
 
+Detailed calculations are available in the
+[Calculations](Calculations/) folder.
+
 ## Spring Design
 
 Key spring parameters include:
@@ -92,16 +109,36 @@ Key spring parameters include:
 
 The calculated spring load is approximately 29 N.
 
+The detailed spring design calculations are provided in the
+[Calculations](Calculations/) folder.
+
 ## Finite Element Analysis
 
 SOLIDWORKS Simulation was used to analyse the mechanical components.
 
 ### Arm FEA
 
-The arm analysis produced a maximum stress concentration of
-approximately 7.015 MPa.
+#### Arm Von Mises Stress
+
+![Arm Von Mises Stress](FEA/arm-von-mises-stres.png)
+
+#### Arm Displacement
+
+![Arm Displacement](FEA/arm-displacement.png)
 
 ### Spring FEA
+
+#### Spring Von Mises Stress
+
+![Spring Von Mises Stress](FEA/spring-von-mises-stress.png)
+
+#### Spring Displacement
+
+![Spring Displacement](FEA/spring-displacement.png)
+
+#### Spring Equivalent Strain
+
+![Spring Equivalent Strain](FEA/spring-equivalent-strain.png)
 
 The spring was analysed under an approximately 28 N static load.
 
@@ -145,7 +182,7 @@ Potential applications include:
 | Suspension | Rocker-bogie |
 | Inspection | Onboard camera |
 | Cleaning | Brush + water jet |
-| CAD/FEA | SOLIDWORKS |
+| CAD / FEA | SOLIDWORKS |
 
 ## Tools Used
 
@@ -163,3 +200,12 @@ traction and adapting to variations in pipeline diameter.
 The combination of spring-based radial expansion and rocker-bogie
 wheel assemblies provides a mechanically simple approach for
 pipeline inspection and cleaning.
+
+## Project Documentation
+
+- [Design Images](Design%20images/)
+- [FEA Results](FEA/)
+- [Calculations](Calculations/)
+- [Project Report](Report/)
+
+

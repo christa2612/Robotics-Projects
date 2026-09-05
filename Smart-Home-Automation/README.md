@@ -66,4 +66,4 @@ A functional physical prototype of a smart home automation system was developed 
 ## Project Documentation
 
 - [Hardware](Hardware/)
-- [Working Video](Working-Video/)
+- [Working Video](Working-video/)

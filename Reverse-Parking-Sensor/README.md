@@ -156,6 +156,12 @@ A functional reverse parking sensor prototype was developed using an IR sensing 
 
 The system demonstrates how obstacle proximity can be converted into visual and audible feedback to assist a user during reverse parking.
 
+## File Access Note
+
+Some project files are large and may not be previewed directly on
+GitHub. For these files, use the **View raw** option on the GitHub
+file page to access the original file.
+
 ## Project Documentation
 
 - [Hardware](Hardware/)

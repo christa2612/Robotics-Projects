@@ -63,6 +63,12 @@ Through this project, the following practical skills were developed:
 
 A functional physical prototype of a smart home automation system was developed and demonstrated. The project provided practical experience in integrating mechanical and electronic elements to create an automated residential environment.
 
+## File Access Note
+
+Some project files are large and may not be previewed directly on
+GitHub. For these files, use the **View raw** option on the GitHub
+file page to access the original file.
+
 ## Project Documentation
 
 - [Hardware](Hardware/)

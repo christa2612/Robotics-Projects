@@ -119,6 +119,6 @@ Possible improvements include:
 
 ## Project Documentation
 
-- [Design Images](Design-Images/)
-- [Prototype Images](Prototype-Images/)
+- [Design Images](Design/)
+- [Prototype Images](Prototype/)
 - [Project Report](Report/)

@@ -1,0 +1,1693 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Robot Arm Pro ESP32</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #eef7f4;
+        --panel: rgba(255, 255, 255, 0.96);
+        --border: rgba(17, 94, 89, 0.16);
+        --text: #10201f;
+        --muted: #54716e;
+        --accent: #0f766e;
+        --accent-strong: #0b5f59;
+        --accent-soft: rgba(15, 118, 110, 0.12);
+        --ok: #15803d;
+        --warn: #b42318;
+        --shadow: 0 18px 48px rgba(15, 64, 61, 0.14);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(20, 184, 166, 0.2), transparent 30%),
+          linear-gradient(135deg, #e7f5f1 0%, #f8fbff 46%, #e9f2ff 100%);
+      }
+
+      body.is-dragging-slider {
+        overflow: hidden;
+        touch-action: none;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .app-shell {
+        width: min(1120px, calc(100vw - 28px));
+        margin: 14px auto;
+        padding: 20px;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .hero {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--accent-strong);
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: clamp(1.75rem, 5vw, 3rem);
+        line-height: 1;
+      }
+
+      .subcopy {
+        margin: 10px 0 0;
+        max-width: 620px;
+        color: var(--muted);
+      }
+
+      .hero-card,
+      .network-card,
+      .joint-card,
+      .button-row,
+      .note-card {
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.76);
+      }
+
+      .hero-card {
+        min-width: 230px;
+        padding: 14px;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(45, 125, 74, 0.14);
+        color: var(--ok);
+        font-weight: 700;
+      }
+
+      .status-pill.offline {
+        background: rgba(163, 60, 33, 0.12);
+        color: var(--warn);
+      }
+
+      .network-grid,
+      .joint-grid {
+        margin-top: 12px;
+        display: grid;
+        gap: 16px;
+      }
+
+      .network-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .network-card,
+      .note-card,
+      .joint-card {
+        padding: 14px;
+      }
+
+      .net-title,
+      .joint-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+
+      .net-line,
+      .meta-line {
+        margin-top: 8px;
+        color: var(--muted);
+        word-break: break-word;
+      }
+
+      .button-row {
+        margin-top: 12px;
+        padding: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .main-actions {
+        backdrop-filter: blur(14px);
+      }
+
+      .joint-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .joint-card-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: baseline;
+      }
+
+      .joint-channel {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .angle-output {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 62px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        font-weight: 700;
+      }
+
+      .joint-controls {
+        margin-top: 16px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .slider-row {
+        display: grid;
+        grid-template-columns: 1fr 92px;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .angle-stack {
+        display: grid;
+        gap: 8px;
+      }
+
+      .quick-step-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .step-button {
+        border: 0;
+        border-radius: 14px;
+        padding: 12px 10px;
+        background: rgba(29, 20, 14, 0.06);
+        color: var(--text);
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .step-button.edge {
+        background: rgba(201, 92, 43, 0.14);
+        color: var(--accent-strong);
+      }
+
+      .limits-panel {
+        border: 1px solid rgba(61, 46, 25, 0.1);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.52);
+        overflow: hidden;
+      }
+
+      .limits-summary {
+        list-style: none;
+        padding: 13px 14px;
+        font-weight: 700;
+        color: var(--muted);
+        cursor: pointer;
+      }
+
+      .limits-summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .limits-content {
+        padding: 0 14px 14px;
+      }
+
+      .limit-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .field-stack {
+        display: grid;
+        gap: 6px;
+      }
+
+      .field-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--accent);
+        height: 40px;
+        background: transparent;
+        touch-action: pan-y;
+      }
+
+      input[type="range"]::-webkit-slider-runnable-track {
+        height: 10px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(201, 92, 43, 0.25), rgba(201, 92, 43, 0.7));
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        margin-top: -9px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 3px solid white;
+        background: var(--accent);
+        box-shadow: 0 8px 16px rgba(157, 63, 23, 0.25);
+      }
+
+      input[type="range"]::-moz-range-track {
+        height: 10px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(201, 92, 43, 0.25), rgba(201, 92, 43, 0.7));
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 3px solid white;
+        background: var(--accent);
+        box-shadow: 0 8px 16px rgba(157, 63, 23, 0.25);
+      }
+
+      input[type="number"] {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(61, 46, 25, 0.14);
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .primary-button,
+      .secondary-button,
+      .action-button {
+        border: 0;
+        border-radius: 14px;
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: transform 140ms ease, opacity 140ms ease, background 140ms ease;
+      }
+
+      .primary-button:hover,
+      .secondary-button:hover,
+      .action-button:hover {
+        transform: translateY(-1px);
+      }
+
+      .primary-button {
+        background: var(--accent);
+        color: white;
+        font-weight: 700;
+      }
+
+      .secondary-button {
+        background: rgba(61, 46, 25, 0.08);
+        color: var(--text);
+      }
+
+      .action-button {
+        background: rgba(29, 20, 14, 0.06);
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .action-button.is-active {
+        background: var(--accent);
+        color: white;
+      }
+
+      .note-card {
+        margin-top: 18px;
+        color: var(--muted);
+      }
+
+      .note-card strong {
+        color: var(--text);
+      }
+
+      .live-card {
+        margin-top: 12px;
+        padding: 14px;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.8);
+      }
+
+      .live-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: start;
+      }
+
+      .live-subcopy {
+        margin: 8px 0 0;
+        color: var(--muted);
+      }
+
+      .live-chip-row,
+      .volume-step-row,
+      .volume-button-row,
+      .sequence-row {
+        margin-top: 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .joint-chip,
+      .step-toggle {
+        border: 0;
+        border-radius: 999px;
+        padding: 10px 14px;
+        font-weight: 700;
+        cursor: pointer;
+        background: rgba(29, 20, 14, 0.08);
+        color: var(--text);
+      }
+
+      .joint-chip.is-active,
+      .step-toggle.is-active {
+        background: var(--accent);
+        color: white;
+      }
+
+      .live-summary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 120px;
+        padding: 10px 14px;
+        border-radius: 16px;
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .volume-button {
+        flex: 1 1 160px;
+        min-height: 54px;
+        font-size: 1rem;
+        font-weight: 700;
+      }
+
+      .live-grid {
+        margin-top: 16px;
+        display: grid;
+        gap: 12px;
+      }
+
+      .live-row-card {
+        border: 1px solid rgba(61, 46, 25, 0.1);
+        border-radius: 18px;
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      .live-row-card.is-active {
+        border-color: rgba(201, 92, 43, 0.38);
+        box-shadow: inset 0 0 0 1px rgba(201, 92, 43, 0.14);
+      }
+
+      .live-row-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .live-row-label {
+        border: 0;
+        padding: 0;
+        background: transparent;
+        color: var(--text);
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .live-row-meta {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .live-row-controls {
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: 58px 1fr 58px;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .mini-button {
+        border: 0;
+        border-radius: 14px;
+        min-height: 44px;
+        font-size: 1.05rem;
+        font-weight: 700;
+        cursor: pointer;
+        background: rgba(29, 20, 14, 0.08);
+        color: var(--text);
+      }
+
+      .record-stat {
+        margin-top: 10px;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .live-topline {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: start;
+      }
+
+      .mini-note {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .fader-grid {
+        margin-top: 16px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        align-items: end;
+        padding: 6px 0 12px;
+      }
+
+      .fader-column {
+        display: grid;
+        justify-items: center;
+        gap: 10px;
+        min-width: 0;
+      }
+
+      .fader-readout {
+        min-width: 64px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .fader-shell {
+        position: relative;
+        width: 100%;
+        max-width: 74px;
+        height: 330px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .fader-touch {
+        position: relative;
+        width: 74px;
+        height: 100%;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .fader-rail {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+        width: 18px;
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(0, 177, 233, 0.92), rgba(0, 148, 210, 0.98));
+        box-shadow:
+          inset 0 0 0 3px rgba(255, 255, 255, 0.78),
+          0 0 0 1px rgba(29, 20, 14, 0.08);
+      }
+
+      .fader-thumb {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        width: 44px;
+        height: 82px;
+        border: 1px solid rgba(0, 0, 0, 0.18);
+        border-radius: 14px;
+        background:
+          linear-gradient(180deg, #6c6c6c 0%, #262626 50%, #595959 100%);
+        box-shadow:
+          0 10px 18px rgba(0, 0, 0, 0.16),
+          inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        transform: translateX(-50%);
+      }
+
+      .fader-thumb::before,
+      .fader-thumb::after {
+        content: "";
+        position: absolute;
+        left: 7px;
+        right: 7px;
+        height: 2px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .fader-thumb::before {
+        top: 28px;
+        box-shadow:
+          0 -10px 0 rgba(255, 255, 255, 0.22),
+          0 10px 0 rgba(255, 255, 255, 0.22);
+      }
+
+      .fader-thumb::after {
+        top: 40px;
+        box-shadow:
+          0 -10px 0 rgba(0, 0, 0, 0.18),
+          0 10px 0 rgba(0, 0, 0, 0.18);
+      }
+
+      .fader-limit {
+        color: var(--muted);
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .fader-label {
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .action-cluster {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .limits-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .limit-item {
+        display: grid;
+        gap: 10px;
+        padding: 12px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.68);
+      }
+
+      .limit-item-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+      }
+
+      .limit-item-title {
+        font-weight: 700;
+      }
+
+      .limit-pair {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .status-note {
+        margin-left: auto;
+        font-weight: 700;
+        color: var(--muted);
+      }
+
+      .status-note.is-dirty {
+        color: var(--warn);
+      }
+
+      .status-note.is-saved {
+        color: var(--ok);
+      }
+
+      @media (max-width: 860px) {
+        .hero,
+        .network-grid,
+        .joint-grid {
+          grid-template-columns: 1fr;
+          display: grid;
+        }
+
+        body {
+          padding-bottom: 116px;
+        }
+
+        .app-shell {
+          width: min(100vw - 14px, 1120px);
+          margin: 7px auto;
+          padding: 16px;
+          border-radius: 22px;
+        }
+
+        .main-actions {
+          position: sticky;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          display: grid;
+          top: auto;
+          bottom: 10px;
+          z-index: 8;
+          box-shadow: 0 18px 40px rgba(54, 34, 14, 0.14);
+        }
+
+        .main-actions .status-note {
+          grid-column: 1 / -1;
+        }
+
+        .action-button,
+        .primary-button,
+        .secondary-button,
+        .step-button {
+          min-height: 48px;
+        }
+
+        .hero-card {
+          min-width: 0;
+        }
+
+        .joint-card {
+          padding: 16px;
+        }
+
+        .live-header {
+          display: grid;
+        }
+
+        .fader-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 6px;
+        }
+
+        .fader-shell {
+          max-width: 68px;
+          height: 292px;
+        }
+
+        .fader-touch {
+          width: 68px;
+        }
+
+        .fader-thumb {
+          width: 40px;
+          height: 78px;
+        }
+
+        .limit-pair {
+          grid-template-columns: 1fr;
+        }
+
+        .status-note {
+          margin-left: 0;
+        }
+
+        .slider-row {
+          grid-template-columns: 1fr 82px;
+        }
+
+        .limit-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Connected to RobotArmPro</p>
+          <h1>Arm Control</h1>
+          <p class="subcopy">
+            Move the four MG90S servos directly from this Nano32 popup.
+          </p>
+        </div>
+
+        <div class="hero-card">
+          <div class="status-pill" id="deviceStatus">Loading…</div>
+          <div class="meta-line" id="deviceMeta">Waiting for ESP32 status</div>
+        </div>
+      </section>
+
+      <section class="network-grid">
+        <article class="network-card">
+          <div class="net-title">Wi-Fi Session</div>
+          <div class="net-line" id="apSsid">SSID: -</div>
+          <div class="net-line" id="apIp">IP: -</div>
+          <div class="net-line" id="phoneIp">Phone IP: -</div>
+        </article>
+      </section>
+
+      <section class="live-card" id="liveControlCard"></section>
+    </main>
+
+    <script>
+      const liveControlCard = document.getElementById("liveControlCard");
+
+      const RECORDING_STORAGE_KEY = "robotArmProSequenceV1";
+      const LOOP_STORAGE_KEY = "robotArmProLoopV1";
+      const RECORD_FRAME_MIN_MS = 90;
+
+      let liveStatus = null;
+      let draftSettings = {};
+      let draftDirty = false;
+      let refreshInterval = null;
+      let statusNote = null;
+      let statusMessage = "Loading ESP32 settings...";
+      let statusClassName = "";
+      const moveTimers = {};
+      const moveQueuedAngles = {};
+      const moveInFlight = {};
+      const lastMoveSentAt = {};
+      let recordedFrames = [];
+      let isRecording = false;
+      let recordStartedAt = 0;
+      let lastRecordedAt = 0;
+      let isPlayingSequence = false;
+      let playbackRunId = 0;
+      let playbackTimer = null;
+      let loopPlayback = false;
+      let limitsExpanded = false;
+      let activeFaderKey = "";
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function toForm(data) {
+        const form = new URLSearchParams();
+        Object.entries(data).forEach(([key, value]) => {
+          form.set(key, String(value));
+        });
+        return form;
+      }
+
+      async function api(path, options = {}) {
+        const response = await fetch(path, {
+          cache: "no-store",
+          ...options,
+        });
+
+        if (!response.ok) {
+          const message = await response.text();
+          throw new Error(message || `HTTP ${response.status}`);
+        }
+
+        const contentType = response.headers.get("content-type") || "";
+        if (contentType.includes("application/json")) {
+          return response.json();
+        }
+
+        return response.text();
+      }
+
+      function getPoseSnapshot() {
+        const pose = {};
+        Object.entries(draftSettings).forEach(([jointKey, joint]) => {
+          pose[jointKey] = joint.angle;
+        });
+        return pose;
+      }
+
+      function getPoseFromFrame(frame) {
+        const pose = {};
+        Object.entries(draftSettings).forEach(([jointKey, joint]) => {
+          const rawValue = Number.parseInt(frame?.pose?.[jointKey], 10);
+          pose[jointKey] = Number.isInteger(rawValue) ? clamp(rawValue, joint.min, joint.max) : joint.angle;
+        });
+        return pose;
+      }
+
+      function samePose(firstPose, secondPose) {
+        return Object.keys(draftSettings).every((jointKey) => Number(firstPose?.[jointKey]) === Number(secondPose?.[jointKey]));
+      }
+
+      function saveSequenceState() {
+        try {
+          localStorage.setItem(RECORDING_STORAGE_KEY, JSON.stringify(recordedFrames));
+          localStorage.setItem(LOOP_STORAGE_KEY, loopPlayback ? "1" : "0");
+        } catch (error) {
+          // Ignore storage errors inside captive-portal webviews.
+        }
+      }
+
+      function loadSequenceState() {
+        try {
+          const savedFrames = JSON.parse(localStorage.getItem(RECORDING_STORAGE_KEY) || "[]");
+          recordedFrames = Array.isArray(savedFrames)
+            ? savedFrames.slice(0, 240).map((frame) => ({
+                at: Number.isFinite(Number(frame?.at)) ? Math.max(0, Number(frame.at)) : 0,
+                pose: frame && typeof frame.pose === "object" ? frame.pose : {},
+              }))
+            : [];
+          loopPlayback = localStorage.getItem(LOOP_STORAGE_KEY) === "1";
+        } catch (error) {
+          recordedFrames = [];
+          loopPlayback = false;
+        }
+      }
+
+      function copyDraftFromStatus(status) {
+        draftSettings = {};
+        status.joints.forEach((joint) => {
+          draftSettings[joint.key] = {
+            angle: joint.angle,
+            min: joint.min,
+            max: joint.max,
+            startupAngle: joint.startupAngle,
+            label: joint.label,
+            channel: joint.channel,
+          };
+        });
+      }
+
+      function applyStatusNoteToDom() {
+        if (!statusNote) {
+          return;
+        }
+
+        statusNote.textContent = statusMessage;
+        statusNote.classList.remove("is-dirty", "is-saved");
+        if (statusClassName) {
+          statusNote.classList.add(statusClassName);
+        }
+      }
+
+      function setStatusNote(message, className = "") {
+        statusMessage = message;
+        statusClassName = className;
+        applyStatusNoteToDom();
+      }
+
+      function markDirty(message = "Unsaved changes on ESP32") {
+        draftDirty = true;
+        setStatusNote(message, "is-dirty");
+      }
+
+      function markSaved(message = "ESP32 settings saved") {
+        draftDirty = false;
+        setStatusNote(message, "is-saved");
+      }
+
+      function setSliderDragState(active) {
+        document.body.classList.toggle("is-dragging-slider", active);
+      }
+
+      function getEventClientY(event) {
+        if (event.touches && event.touches.length) {
+          return event.touches[0].clientY;
+        }
+
+        if (event.changedTouches && event.changedTouches.length) {
+          return event.changedTouches[0].clientY;
+        }
+
+        if (typeof event.clientY === "number") {
+          return event.clientY;
+        }
+
+        return null;
+      }
+
+      function updateFaderFromEvent(jointKey, event) {
+        const joint = draftSettings[jointKey];
+        const surface = document.querySelector(`[data-fader="${jointKey}"]`);
+        const thumb = document.querySelector(`[data-thumb="${jointKey}"]`);
+        const clientY = getEventClientY(event);
+
+        if (!joint || !surface || clientY === null) {
+          return;
+        }
+
+        const rect = surface.getBoundingClientRect();
+        const thumbHeight = thumb ? thumb.offsetHeight : 0;
+        const travel = Math.max(1, rect.height - thumbHeight);
+        const top = clamp(clientY - rect.top - (thumbHeight / 2), 0, travel);
+        const ratio = 1 - (top / travel);
+        const nextAngle = Math.round(joint.min + (ratio * (joint.max - joint.min)));
+
+        updateDraftAngle(jointKey, nextAngle, true, "manual");
+      }
+
+      function startFaderDrag(jointKey, event) {
+        activeFaderKey = jointKey;
+        setSliderDragState(true);
+
+        if (event && event.cancelable) {
+          event.preventDefault();
+        }
+
+        updateFaderFromEvent(jointKey, event);
+      }
+
+      function moveActiveFader(event) {
+        if (!activeFaderKey) {
+          return;
+        }
+
+        if (event && event.cancelable) {
+          event.preventDefault();
+        }
+
+        updateFaderFromEvent(activeFaderKey, event);
+      }
+
+      function endActiveFader() {
+        activeFaderKey = "";
+        setSliderDragState(false);
+      }
+
+      function bindFaderInteraction(surface, jointKey) {
+        surface.addEventListener("mousedown", (event) => {
+          startFaderDrag(jointKey, event);
+        });
+
+        surface.addEventListener("touchstart", (event) => {
+          startFaderDrag(jointKey, event);
+        }, { passive: false });
+      }
+
+      function controllerBadgeText(status) {
+        if (!status?.pcaReady) {
+          return "PCA Missing";
+        }
+
+        if (isRecording) {
+          return "Recording";
+        }
+
+        if (isPlayingSequence) {
+          return loopPlayback ? "Looping" : "Playing";
+        }
+
+        return "Ready";
+      }
+
+      function updateNetworkCards(status) {
+        const deviceStatus = document.getElementById("deviceStatus");
+        const deviceMeta = document.getElementById("deviceMeta");
+
+        deviceStatus.textContent = controllerBadgeText(status);
+        deviceStatus.classList.toggle("offline", !status.pcaReady);
+
+        if (!status.pcaReady) {
+          deviceMeta.textContent = `Hotspot ready at ${status.apIp}. Connect PCA9685 to enable servo movement.`;
+        } else {
+          deviceMeta.textContent = `Open ${status.apIp} on your phone and move the sliders live.`;
+        }
+
+        document.getElementById("apSsid").textContent = `SSID: ${status.apSsid}`;
+        document.getElementById("apIp").textContent = `IP: ${status.apIp}`;
+        document.getElementById("phoneIp").textContent = `Phone IP: ${status.clientIp || "-"}`;
+      }
+
+      function sequenceSummaryText() {
+        const count = recordedFrames.length;
+        const label = count === 1 ? "frame" : "frames";
+
+        if (isRecording) {
+          return `Recording live move · ${count} ${label}`;
+        }
+
+        if (isPlayingSequence) {
+          return `Playing ${count} ${label}${loopPlayback ? " in loop" : ""}`;
+        }
+
+        if (!count) {
+          return "No recorded move saved";
+        }
+
+        return `${count} ${label} saved${loopPlayback ? " · Loop On" : ""}`;
+      }
+
+      function selectedSpeedMode() {
+        return liveStatus?.speedMode || "slow";
+      }
+
+      function renderLiveControlCard() {
+        const joints = Object.entries(draftSettings);
+        if (!joints.length) {
+          liveControlCard.innerHTML = "";
+          statusNote = null;
+          return;
+        }
+
+        liveControlCard.innerHTML = `
+          <div class="live-topline">
+            <div>
+              <div class="joint-title">Arm Slider Control</div>
+              <p class="live-subcopy">Clean 4-channel live control. Drag the sliders like a mixer, then record, play, or loop the movement.</p>
+            </div>
+            <div class="live-summary" id="controllerBadge">${controllerBadgeText(liveStatus)}</div>
+          </div>
+
+          <div class="fader-grid">
+            ${joints
+              .map(
+                ([jointKey, joint]) => `
+                  <article class="fader-column">
+                    <div class="fader-readout" data-output="${jointKey}">${joint.angle}°</div>
+                    <div class="fader-limit" data-max-label="${jointKey}">${joint.max}°</div>
+                    <div class="fader-shell">
+                      <div class="fader-touch" data-fader="${jointKey}">
+                        <div class="fader-rail"></div>
+                        <div class="fader-thumb" data-thumb="${jointKey}"></div>
+                      </div>
+                    </div>
+                    <div class="fader-limit" data-min-label="${jointKey}">${joint.min}°</div>
+                    <div class="fader-label">${joint.label}</div>
+                  </article>
+                `
+              )
+              .join("")}
+          </div>
+
+          <div class="action-cluster">
+            <button type="button" class="action-button${selectedSpeedMode() === "slow" ? " is-active" : ""}" data-speed="slow">Slow</button>
+            <button type="button" class="action-button${selectedSpeedMode() === "medium" ? " is-active" : ""}" data-speed="medium">Medium</button>
+            <button type="button" class="action-button${selectedSpeedMode() === "fast" ? " is-active" : ""}" data-speed="fast">Fast</button>
+          </div>
+
+          <div class="action-cluster">
+            <button type="button" class="action-button" id="goHomeButton">Go Home</button>
+            <button type="button" class="action-button" id="setStartupPoseButton">Set Startup Pose</button>
+            <button type="button" class="primary-button" id="saveSettingsButton">Save Limits And Pose</button>
+          </div>
+
+          <div class="action-cluster">
+            <button type="button" class="action-button${isRecording ? " is-active" : ""}" id="recordButton">${isRecording ? "Stop Record" : "Record"}</button>
+            <button type="button" class="action-button${isPlayingSequence ? " is-active" : ""}" id="playSequenceButton">${isPlayingSequence ? "Stop Play" : "Play"}</button>
+            <button type="button" class="action-button${loopPlayback ? " is-active" : ""}" id="loopSequenceButton">Loop ${loopPlayback ? "On" : "Off"}</button>
+            <button type="button" class="action-button" id="clearSequenceButton">Clear</button>
+          </div>
+
+          <div class="record-stat" id="sequenceStatus">${sequenceSummaryText()}</div>
+
+          <details class="limits-panel" id="limitsPanel"${limitsExpanded ? " open" : ""}>
+            <summary class="limits-summary">Limits</summary>
+            <div class="limits-content">
+              <div class="limits-grid">
+                ${joints
+                  .map(
+                    ([jointKey, joint]) => `
+                      <div class="limit-item">
+                        <div class="limit-item-header">
+                          <div class="limit-item-title">${joint.label}</div>
+                          <div class="live-row-meta">Home ${joint.startupAngle}°</div>
+                        </div>
+                        <div class="limit-pair">
+                          <label class="field-stack">
+                            <span class="field-label">Min</span>
+                            <input type="number" min="0" max="180" value="${joint.min}" data-min="${jointKey}" />
+                          </label>
+                          <label class="field-stack">
+                            <span class="field-label">Max</span>
+                            <input type="number" min="0" max="180" value="${joint.max}" data-max="${jointKey}" />
+                          </label>
+                        </div>
+                      </div>
+                    `
+                  )
+                  .join("")}
+              </div>
+            </div>
+          </details>
+
+          <div class="mini-note">USB powers the ESP32 only. The servos still need separate 5V on PCA9685 V+.</div>
+          <div class="record-stat status-note" id="statusNote">${statusMessage}</div>
+        `;
+
+        statusNote = document.getElementById("statusNote");
+        applyStatusNoteToDom();
+
+        const limitsPanel = document.getElementById("limitsPanel");
+        if (limitsPanel) {
+          limitsPanel.addEventListener("toggle", () => {
+            limitsExpanded = limitsPanel.open;
+          });
+        }
+
+        document.querySelectorAll("[data-fader]").forEach((surface) => {
+          bindFaderInteraction(surface, surface.dataset.fader);
+        });
+
+        document.querySelectorAll("[data-min]").forEach((input) => {
+          input.addEventListener("change", (event) => {
+            updateDraftLimit(input.dataset.min, "min", Number.parseInt(event.target.value, 10));
+          });
+        });
+
+        document.querySelectorAll("[data-max]").forEach((input) => {
+          input.addEventListener("change", (event) => {
+            updateDraftLimit(input.dataset.max, "max", Number.parseInt(event.target.value, 10));
+          });
+        });
+
+        document.querySelectorAll("[data-speed]").forEach((button) => {
+          button.addEventListener("click", () => {
+            setSpeedMode(button.dataset.speed);
+          });
+        });
+
+        document.getElementById("goHomeButton").addEventListener("click", () => {
+          postSimple("/api/go-home", "Moved to saved startup pose.");
+        });
+
+        document.getElementById("setStartupPoseButton").addEventListener("click", () => {
+          postAndMarkSaved("/api/startup-pose", "Startup pose saved on ESP32");
+        });
+
+        document.getElementById("saveSettingsButton").addEventListener("click", () => {
+          saveSettingsToEsp32();
+        });
+
+        document.getElementById("recordButton").addEventListener("click", () => {
+          toggleRecording();
+        });
+
+        document.getElementById("playSequenceButton").addEventListener("click", () => {
+          if (isPlayingSequence) {
+            stopPlayback("Playback stopped");
+            return;
+          }
+
+          playRecordedSequence();
+        });
+
+        document.getElementById("loopSequenceButton").addEventListener("click", () => {
+          loopPlayback = !loopPlayback;
+          saveSequenceState();
+          syncLiveControlCard();
+          setStatusNote(loopPlayback ? "Loop enabled for recorded move" : "Loop disabled", "is-saved");
+        });
+
+        document.getElementById("clearSequenceButton").addEventListener("click", () => {
+          clearRecordedSequence();
+        });
+
+        syncLiveControlCard();
+      }
+
+      function syncLiveControlCard() {
+        if (!liveControlCard.children.length) {
+          return;
+        }
+
+        const badge = document.getElementById("controllerBadge");
+        const sequenceStatus = document.getElementById("sequenceStatus");
+        const recordButton = document.getElementById("recordButton");
+        const playButton = document.getElementById("playSequenceButton");
+        const loopButton = document.getElementById("loopSequenceButton");
+
+        if (badge) {
+          badge.textContent = controllerBadgeText(liveStatus);
+        }
+
+        if (sequenceStatus) {
+          sequenceStatus.textContent = sequenceSummaryText();
+        }
+
+        if (recordButton) {
+          recordButton.textContent = isRecording ? "Stop Record" : "Record";
+          recordButton.classList.toggle("is-active", isRecording);
+        }
+
+        if (playButton) {
+          playButton.textContent = isPlayingSequence ? "Stop Play" : "Play";
+          playButton.classList.toggle("is-active", isPlayingSequence);
+        }
+
+        if (loopButton) {
+          loopButton.textContent = `Loop ${loopPlayback ? "On" : "Off"}`;
+          loopButton.classList.toggle("is-active", loopPlayback);
+        }
+
+        document.querySelectorAll("[data-speed]").forEach((button) => {
+          button.classList.toggle("is-active", button.dataset.speed === selectedSpeedMode());
+        });
+
+        Object.entries(draftSettings).forEach(([jointKey, joint]) => {
+          const surface = document.querySelector(`[data-fader="${jointKey}"]`);
+          const thumb = document.querySelector(`[data-thumb="${jointKey}"]`);
+          const output = document.querySelector(`[data-output="${jointKey}"]`);
+          const minLabel = document.querySelector(`[data-min-label="${jointKey}"]`);
+          const maxLabel = document.querySelector(`[data-max-label="${jointKey}"]`);
+          const minInput = document.querySelector(`[data-min="${jointKey}"]`);
+          const maxInput = document.querySelector(`[data-max="${jointKey}"]`);
+
+          if (surface && thumb) {
+            const travel = Math.max(0, surface.clientHeight - thumb.offsetHeight);
+            const ratio = joint.max === joint.min ? 0 : ((joint.angle - joint.min) / (joint.max - joint.min));
+            thumb.style.top = `${Math.round(travel * (1 - ratio))}px`;
+          }
+
+          if (output) {
+            output.textContent = `${joint.angle}°`;
+          }
+
+          if (minLabel) {
+            minLabel.textContent = `${joint.min}°`;
+          }
+
+          if (maxLabel) {
+            maxLabel.textContent = `${joint.max}°`;
+          }
+
+          if (minInput && document.activeElement !== minInput) {
+            minInput.value = String(joint.min);
+          }
+
+          if (maxInput && document.activeElement !== maxInput) {
+            maxInput.value = String(joint.max);
+          }
+        });
+
+        applyStatusNoteToDom();
+      }
+
+      function recordCurrentPose(force = false) {
+        if (!isRecording || !Object.keys(draftSettings).length) {
+          return;
+        }
+
+        const elapsed = Math.max(0, Math.round(performance.now() - recordStartedAt));
+        const pose = getPoseSnapshot();
+        const lastFrame = recordedFrames[recordedFrames.length - 1];
+
+        if (lastFrame && samePose(lastFrame.pose, pose)) {
+          if (force) {
+            lastFrame.at = elapsed;
+            saveSequenceState();
+            syncLiveControlCard();
+          }
+          return;
+        }
+
+        if (lastFrame && !force && elapsed - lastRecordedAt < RECORD_FRAME_MIN_MS) {
+          lastFrame.at = elapsed;
+          lastFrame.pose = pose;
+        } else {
+          recordedFrames.push({ at: elapsed, pose });
+        }
+
+        lastRecordedAt = elapsed;
+        saveSequenceState();
+        syncLiveControlCard();
+      }
+
+      function stopPlayback(note = "") {
+        const wasPlaying = isPlayingSequence;
+        playbackRunId += 1;
+
+        if (playbackTimer) {
+          clearTimeout(playbackTimer);
+          playbackTimer = null;
+        }
+
+        isPlayingSequence = false;
+        syncLiveControlCard();
+        updateNetworkCards(liveStatus);
+
+        if (note && wasPlaying) {
+          setStatusNote(note, "is-dirty");
+        }
+      }
+
+      function clearRecordedSequence() {
+        isRecording = false;
+        stopPlayback("");
+        recordedFrames = [];
+        saveSequenceState();
+        syncLiveControlCard();
+        markSaved("Recorded move cleared");
+      }
+
+      function toggleRecording() {
+        if (isRecording) {
+          recordCurrentPose(true);
+          isRecording = false;
+          saveSequenceState();
+          syncLiveControlCard();
+          updateNetworkCards(liveStatus);
+          markSaved(`Recording saved (${recordedFrames.length} frames)`);
+          return;
+        }
+
+        stopPlayback("");
+        isRecording = true;
+        recordStartedAt = performance.now();
+        lastRecordedAt = 0;
+        recordedFrames = [{ at: 0, pose: getPoseSnapshot() }];
+        saveSequenceState();
+        syncLiveControlCard();
+        updateNetworkCards(liveStatus);
+        setStatusNote("Recording live move sequence", "is-dirty");
+      }
+
+      function updateDraftAngle(jointKey, nextAngle, sendMove, source = "manual") {
+        const joint = draftSettings[jointKey];
+        if (!joint) {
+          return;
+        }
+
+        if (source === "manual" && isPlayingSequence) {
+          stopPlayback("Playback stopped for manual control");
+        }
+
+        const safeAngle = Number.isInteger(nextAngle) ? clamp(nextAngle, joint.min, joint.max) : joint.angle;
+        joint.angle = safeAngle;
+        syncLiveControlCard();
+        markDirty("Pose changed. Save if this should be kept on the ESP32.");
+
+        if (source === "manual") {
+          recordCurrentPose();
+        }
+
+        if (sendMove) {
+          queueMove(jointKey, safeAngle);
+        }
+      }
+
+      function updateDraftLimit(jointKey, limitKey, rawValue) {
+        const joint = draftSettings[jointKey];
+        if (!joint) {
+          return;
+        }
+
+        if (isPlayingSequence) {
+          stopPlayback("Playback stopped for manual control");
+        }
+
+        const safeValue = Number.isInteger(rawValue) ? clamp(rawValue, 0, 180) : joint[limitKey];
+        joint[limitKey] = safeValue;
+
+        if (joint.min > joint.max) {
+          if (limitKey === "min") {
+            joint.max = joint.min;
+          } else {
+            joint.min = joint.max;
+          }
+        }
+
+        joint.angle = clamp(joint.angle, joint.min, joint.max);
+        syncLiveControlCard();
+        markDirty("Limits changed. Save to keep them on the ESP32.");
+        queueMove(jointKey, joint.angle);
+      }
+
+      function queueMove(jointKey, angle) {
+        moveQueuedAngles[jointKey] = angle;
+
+        if (moveTimers[jointKey] || moveInFlight[jointKey]) {
+          return;
+        }
+
+        const now = Date.now();
+        const elapsed = now - (lastMoveSentAt[jointKey] || 0);
+        const waitMs = Math.max(0, 65 - elapsed);
+        moveTimers[jointKey] = window.setTimeout(() => {
+          sendQueuedMove(jointKey);
+        }, waitMs);
+      }
+
+      async function sendQueuedMove(jointKey) {
+        const angle = moveQueuedAngles[jointKey];
+        moveQueuedAngles[jointKey] = undefined;
+        moveTimers[jointKey] = null;
+        moveInFlight[jointKey] = true;
+        lastMoveSentAt[jointKey] = Date.now();
+
+        try {
+          liveStatus = await api("/api/move", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: toForm({ joint: jointKey, angle }),
+          });
+          updateNetworkCards(liveStatus);
+          syncLiveControlCard();
+        } catch (error) {
+          setStatusNote(error.message, "is-dirty");
+        } finally {
+          moveInFlight[jointKey] = false;
+          if (moveQueuedAngles[jointKey] !== undefined) {
+            queueMove(jointKey, moveQueuedAngles[jointKey]);
+          }
+        }
+      }
+
+      async function setSpeedMode(speedMode) {
+        try {
+          liveStatus = await api("/api/speed", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: toForm({ speed: speedMode }),
+          });
+          syncLiveControlCard();
+          setStatusNote(`Speed set to ${speedMode}`, "is-saved");
+        } catch (error) {
+          setStatusNote(error.message, "is-dirty");
+        }
+      }
+
+      function waitForPlayback(milliseconds, runId) {
+        return new Promise((resolve) => {
+          playbackTimer = window.setTimeout(() => {
+            playbackTimer = null;
+            resolve(runId === playbackRunId);
+          }, Math.max(70, milliseconds));
+        });
+      }
+
+      async function sendPoseToEsp32(pose) {
+        const formData = {};
+
+        Object.entries(pose).forEach(([jointKey, angle]) => {
+          formData[`${jointKey}_angle`] = angle;
+        });
+
+        liveStatus = await api("/api/pose", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: toForm(formData),
+        });
+
+        copyDraftFromStatus(liveStatus);
+        syncLiveControlCard();
+        updateNetworkCards(liveStatus);
+      }
+
+      async function playRecordedSequence() {
+        if (!recordedFrames.length) {
+          setStatusNote("Record a move first", "is-dirty");
+          return;
+        }
+
+        if (isRecording) {
+          toggleRecording();
+        }
+
+        stopPlayback("");
+        const runId = ++playbackRunId;
+        isPlayingSequence = true;
+        syncLiveControlCard();
+        updateNetworkCards(liveStatus);
+        setStatusNote(loopPlayback ? "Playing recorded move in loop" : "Playing recorded move", "is-dirty");
+
+        try {
+          do {
+            for (let index = 0; index < recordedFrames.length; index += 1) {
+              if (runId !== playbackRunId) {
+                return;
+              }
+
+              await sendPoseToEsp32(getPoseFromFrame(recordedFrames[index]));
+
+              const nextFrame = recordedFrames[index + 1];
+              if (!nextFrame) {
+                continue;
+              }
+
+              const keepGoing = await waitForPlayback(nextFrame.at - recordedFrames[index].at, runId);
+              if (!keepGoing) {
+                return;
+              }
+            }
+
+            if (!loopPlayback) {
+              break;
+            }
+
+            const continueLoop = await waitForPlayback(220, runId);
+            if (!continueLoop) {
+              return;
+            }
+          } while (loopPlayback && runId === playbackRunId);
+        } catch (error) {
+          setStatusNote(error.message, "is-dirty");
+        } finally {
+          if (runId === playbackRunId) {
+            isPlayingSequence = false;
+            syncLiveControlCard();
+            updateNetworkCards(liveStatus);
+            if (!loopPlayback) {
+              markSaved("Playback finished");
+            }
+          }
+        }
+      }
+
+      async function refreshStatus(forceSyncDraft = false) {
+        try {
+          const status = await api("data:application/json,{%22ok%22:true,%22apSsid%22:%22RobotArmPro-Setup%22,%22apIp%22:%22192.168.4.1%22,%22clientIp%22:%22192.168.4.2%22,%22pcaReady%22:true,%22danceActive%22:false,%22speedMode%22:%22slow%22,%22joints%22:[{%22key%22:%22base%22,%22label%22:%22Base%22,%22channel%22:0,%22angle%22:90,%22min%22:0,%22max%22:180,%22startupAngle%22:90},{%22key%22:%22shoulder%22,%22label%22:%22Shoulder%22,%22channel%22:1,%22angle%22:90,%22min%22:0,%22max%22:180,%22startupAngle%22:90},{%22key%22:%22elbow%22,%22label%22:%22Elbow%22,%22channel%22:2,%22angle%22:90,%22min%22:0,%22max%22:180,%22startupAngle%22:90},{%22key%22:%22clamp%22,%22label%22:%22Clamp%22,%22channel%22:3,%22angle%22:40,%22min%22:0,%22max%22:180,%22startupAngle%22:40}]}");
+          liveStatus = status;
+          updateNetworkCards(status);
+
+          if (!draftDirty || forceSyncDraft || !Object.keys(draftSettings).length) {
+            copyDraftFromStatus(status);
+            if (!liveControlCard.children.length || forceSyncDraft || !Object.keys(draftSettings).length) {
+              renderLiveControlCard();
+            } else {
+              syncLiveControlCard();
+            }
+            if (!draftDirty) {
+              markSaved("ESP32 online");
+            }
+          } else {
+            syncLiveControlCard();
+          }
+        } catch (error) {
+          document.getElementById("deviceStatus").textContent = "Offline";
+          document.getElementById("deviceStatus").classList.add("offline");
+          document.getElementById("deviceMeta").textContent = error.message;
+          setStatusNote("ESP32 is restarting or unreachable", "is-dirty");
+        }
+      }
+
+      async function postSimple(path, noteOnSuccess) {
+        stopPlayback("");
+
+        try {
+          liveStatus = await api(path, { method: "POST" });
+          copyDraftFromStatus(liveStatus);
+          renderLiveControlCard();
+          updateNetworkCards(liveStatus);
+          markDirty(noteOnSuccess);
+        } catch (error) {
+          setStatusNote(error.message, "is-dirty");
+        }
+      }
+
+      async function postAndMarkSaved(path, noteOnSuccess) {
+        stopPlayback("");
+
+        try {
+          liveStatus = await api(path, { method: "POST" });
+          copyDraftFromStatus(liveStatus);
+          renderLiveControlCard();
+          updateNetworkCards(liveStatus);
+          markSaved(noteOnSuccess);
+        } catch (error) {
+          setStatusNote(error.message, "is-dirty");
+        }
+      }
+
+      async function saveSettingsToEsp32() {
+        const formData = {};
+        stopPlayback("");
+
+        Object.entries(draftSettings).forEach(([jointKey, joint]) => {
+          formData[`${jointKey}_min`] = joint.min;
+          formData[`${jointKey}_max`] = joint.max;
+          formData[`${jointKey}_angle`] = joint.angle;
+        });
+
+        try {
+          liveStatus = await api("/api/settings", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: toForm(formData),
+          });
+          copyDraftFromStatus(liveStatus);
+          renderLiveControlCard();
+          updateNetworkCards(liveStatus);
+          markSaved("Limits and pose saved on ESP32");
+        } catch (error) {
+          setStatusNote(error.message, "is-dirty");
+        }
+      }
+
+      window.addEventListener("load", async () => {
+        loadSequenceState();
+        await refreshStatus(true);
+        refreshInterval = window.setInterval(() => {
+          refreshStatus(false);
+        }, 1800);
+      });
+
+      window.addEventListener("mousemove", moveActiveFader);
+      window.addEventListener("mouseup", endActiveFader);
+      window.addEventListener("touchmove", moveActiveFader, { passive: false });
+      window.addEventListener("touchend", endActiveFader, { passive: true });
+      window.addEventListener("touchcancel", endActiveFader, { passive: true });
+    </script>
+  </body>
+</html>

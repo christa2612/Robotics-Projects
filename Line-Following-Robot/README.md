@@ -354,7 +354,6 @@ file page to access the original file.
 
 ## 📂 Project Documentation
 
-- [Arduino](Arduino/)
-- [Circuit](Circuit/)
-- [Images](Images/)
-- [Videos](Videos/)
+- [Arduino](Code/)
+- [Images](Model-Images/)
+- [working Videos](Working-Videos/)

@@ -252,6 +252,12 @@ The combination of YOLOv8 object detection, decision-making logic,
 socket communication, and Raspberry Pi GPIO control provides a
 practical implementation of adaptive traffic management.
 
+## File Access Note
+
+Some project files are large and may not be previewed directly on
+GitHub. For these files, use the **View raw** option on the GitHub
+file page to access the original file.
+
 ## Project Documentation
 
 - [Figures](Figures/)

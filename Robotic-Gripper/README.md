@@ -148,7 +148,6 @@ file page to access the original file.
 
 ## Project Documentation
 
-- [CAD DESIGN](CAD-Design/)
 - [G Code](G-code/)
 - [Setup Sheet](Setup-Sheet/)
 - [Videos](Videos/)

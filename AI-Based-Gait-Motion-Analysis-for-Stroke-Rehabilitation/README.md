@@ -332,10 +332,6 @@ Some project files are large and may not be previewed directly on GitHub. For th
 
 ## Project Documentation
 
-- [OpenSim Models](OpenSim/)
-- [Model](Model/)
-- [Results](Results/)
-- [Figures](Figures/)
 - [Project Report](Report/)
 
 ---

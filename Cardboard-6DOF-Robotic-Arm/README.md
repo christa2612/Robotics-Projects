@@ -117,6 +117,12 @@ Possible improvements include:
 - Improving structural rigidity and repeatability.
 - Integrating a more capable end effector.
 
+## File Access Note
+
+Some project files are large and may not be previewed directly on
+GitHub. For these files, use the **View raw** option on the GitHub
+file page to access the original file.
+
 ## Project Documentation
 
 - [Design Images](Design/)

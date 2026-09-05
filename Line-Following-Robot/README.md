@@ -344,9 +344,11 @@ The project demonstrated the practical implementation of a **sensor-based autono
 
 ---
 
-## 📁 File Access Note
+## File Access Note
 
-Some software, circuit, and project files may be large and may not be previewed directly on GitHub. If a file does not open in the GitHub preview, use the **View raw** option on the corresponding file page to access the original file.
+Some project files are large and may not be previewed directly on
+GitHub. For these files, use the **View raw** option on the GitHub
+file page to access the original file.
 
 ---
 
@@ -356,9 +358,3 @@ Some software, circuit, and project files may be large and may not be previewed 
 - [Circuit](Circuit/)
 - [Images](Images/)
 - [Videos](Videos/)
-
----
-
-## 📜 License
-
-This project is documented for **educational, internship, and portfolio purposes**.
